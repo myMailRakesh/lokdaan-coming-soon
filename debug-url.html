@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Debug Test</title>
+</head>
+<body>
+    <h1>URL Construction Debug Test</h1>
+    <div id="output"></div>
+    
+    <script>
+        function debugURL() {
+            const output = document.getElementById('output');
+            let html = '<h2>URL Debug Information:</h2>';
+            
+            try {
+                html += `<p><strong>window.location.href:</strong> ${window.location.href}</p>`;
+                html += `<p><strong>window.location.origin:</strong> ${window.location.origin}</p>`;
+                html += `<p><strong>window.location.protocol:</strong> ${window.location.protocol}</p>`;
+                html += `<p><strong>window.location.host:</strong> ${window.location.host}</p>`;
+                html += `<p><strong>window.location.pathname:</strong> ${window.location.pathname}</p>`;
+                
+                let redirectTo;
+                if (window.location.origin && window.location.origin !== 'null') {
+                    redirectTo = window.location.origin + '/reset-password.html';
+                } else {
+                    redirectTo = window.location.protocol + '//' + window.location.host + '/reset-password.html';
+                    if (redirectTo.startsWith('file://')) {
+                        redirectTo = 'https://localhost:3000/reset-password.html';
+                    }
+                }
+                
+                html += `<p><strong>Constructed redirectTo:</strong> ${redirectTo}</p>`;
+                
+                // Test URL constructor
+                try {
+                    new URL(redirectTo);
+                    html += `<p style="color: green;"><strong>✅ URL is valid</strong></p>`;
+                } catch (urlError) {
+                    html += `<p style="color: red;"><strong>❌ URL is invalid:</strong> ${urlError.message}</p>`;
+                }
+                
+            } catch (error) {
+                html += `<p style="color: red;"><strong>Error:</strong> ${error.message}</p>`;
+            }
+            
+            output.innerHTML = html;
+        }
+        
+        // Run the debug function when the page loads
+        window.addEventListener('DOMContentLoaded', debugURL);
+    </script>
+</body>
+</html>
